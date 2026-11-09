@@ -43,7 +43,10 @@
     for (const img of imgs) {
       const src = clean(img.currentSrc || img.src || img.getAttribute('data-src'));
       const row = { src: src.slice(0, 230), alt: clean(img.alt).slice(0, 85), element: elementRef(img) };
-      if (img.complete && img.naturalWidth === 0 && src && !src.startsWith('data:')) badImages.push(row);
+      // Hidden or 1-2px images (analytics beacons such as Bing's #batBeacon) are not storefront imagery.
+      const box = img.getBoundingClientRect();
+      const invisible = img.getClientRects().length === 0 || (box.width <= 2 && box.height <= 2);
+      if (img.complete && img.naturalWidth === 0 && src && !src.startsWith('data:') && !invisible) badImages.push(row);
       else if (!img.complete && img.loading === 'lazy') unloadedImages.push(row);
     }
     function findProduct(node, depth) {

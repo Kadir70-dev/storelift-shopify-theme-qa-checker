@@ -190,6 +190,12 @@ def run_tests():
         else:
             fail("404 fixture images detected as broken", str(issue_titles))
 
+        bad_srcs = [i.get("src", "") for i in result_broken.get("badImages", [])]
+        if not any("beacon-404" in s for s in bad_srcs):
+            ok("Hidden tracking beacon not counted as a broken image")
+        else:
+            fail("Hidden tracking beacon not counted as a broken image", str(bad_srcs))
+
         if result_broken["score"] < 60:
             ok(f"Broken page score appropriately low ({result_broken['score']})")
         else:
