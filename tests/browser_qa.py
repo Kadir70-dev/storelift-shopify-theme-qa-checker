@@ -41,10 +41,39 @@ def skip_if_unavailable():
         return True
 
 
-def collect_page(page, fixture_name: str) -> dict:
-    """Load a fixture file and run collector.js + logic.js to get analyzed page data."""
-    fixture_url = f"file://{FIXTURES / fixture_name}"
-    page.goto(fixture_url)
+STORE_ORIGIN = "https://testshop.myshopify.com"
+# Browser-drawn 1px SVG, served from a mocked image URL. No external network.
+PIXEL_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"><rect width="1" height="1" fill="blue"/></svg>'
+
+
+def collect_page(page, fixture_name: str, after_load=None) -> dict:
+    """Exercise real Chromium DOM under a synthetic same-origin Shopify URL.
+
+    All requests are intercepted. Fixtures and valid images are served locally;
+    deliberately broken images return 404. This is NOT live-store testing.
+    """
+    healthy = fixture_name == "product-page.html"
+    url = (STORE_ORIGIN + "/products/classic-cotton-shirt") if healthy else (
+        STORE_ORIGIN + "/pages/broken-test")
+    html = (FIXTURES / fixture_name).read_text(encoding="utf-8")
+
+    def serve_fixture(route):
+        req = route.request
+        target = req.url
+        if target == url and req.resource_type == "document":
+            route.fulfill(status=200, content_type="text/html", body=html)
+        elif target.startswith("https://cdn.shopify.com/") and req.resource_type == "image":
+            route.fulfill(status=200, content_type="image/svg+xml", body=PIXEL_SVG)
+        elif target in (STORE_ORIGIN + "/broken-404.jpg", STORE_ORIGIN + "/no-alt.jpg"):
+            route.fulfill(status=404, content_type="text/plain", body="Not found")
+        else:
+            # Fail closed: no actual external request leaves the test browser.
+            route.abort()
+
+    page.route("**/*", serve_fixture)
+    page.goto(url, wait_until="load")
+    if after_load:
+        after_load(page)
     # Inject both scripts
     page.add_script_tag(path=str(ROOT / "logic.js"))
     page.add_script_tag(path=str(ROOT / "collector.js"))
@@ -156,6 +185,11 @@ def run_tests():
         else:
             fail("Empty/non-navigating links detected")
 
+        if any("broken" in t.lower() for t in issue_titles):
+            ok("404 fixture images detected as broken")
+        else:
+            fail("404 fixture images detected as broken", str(issue_titles))
+
         if result_broken["score"] < 60:
             ok(f"Broken page score appropriately low ({result_broken['score']})")
         else:
@@ -174,15 +208,19 @@ def run_tests():
         print("\n=== Security: collector.js does not exfiltrate data ===")
         page = browser.new_page()
         requests_made = []
-        page.on("request", lambda req: requests_made.append(req.url) if not req.url.startswith("file://") else None)
-        collect_page(page, "product-page.html")
+
+        def monitor_after_fixture_loaded(p):
+            # Asset loads are page resources, not network calls from collector.js.
+            # Observe requests only after the full fixture and images are loaded.
+            p.on("request", lambda req: requests_made.append(req.url))
+
+        collect_page(page, "product-page.html", after_load=monitor_after_fixture_loaded)
         page.close()
 
-        external = [u for u in requests_made if not u.startswith("file://")]
-        if not external:
-            ok("No external network requests made by collector.js")
+        if not requests_made:
+            ok("Collector analysis triggers no extra network requests")
         else:
-            fail("No external network requests made by collector.js", str(external[:3]))
+            fail("Collector analysis triggers no extra network requests", str(requests_made[:3]))
 
         browser.close()
 
