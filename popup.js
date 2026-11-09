@@ -47,17 +47,26 @@ async function scanOne() {
   } catch (e) { status('Could not audit: ' + (e.message || e)); }
   finally { $('scan').disabled = false; }
 }
-async function requestOrigin(url) {
-  const origin = new URL(url).origin + '/*';
-  return await chrome.permissions.request({ origins: [origin] });
+// Chrome closes the action popup when a permission prompt opens, which drops the
+// pending request. Only use access already granted here; otherwise open a normal
+// extension tab where the user can grant it, then retry from the popup.
+async function hasOrigin(url) {
+  return await chrome.permissions.contains({ origins: [new URL(url).origin + '/*'] });
+}
+async function openAccessPage(url, purpose) {
+  const page = chrome.runtime.getURL('permission.html') + '?for=' + purpose + '&origin=' + encodeURIComponent(new URL(url).origin);
+  await chrome.tabs.create({ url: page });
 }
 async function scanOpenTabs() {
   $('scan-tabs').disabled = true;
   try {
     const active = await activeTab();
     const origin = new URL(active.url).origin;
-    status('Chrome will ask permission for this store only; no other site is scanned.');
-    if (!await requestOrigin(active.url)) throw Error('Site permission declined. You can still scan the active tab.');
+    if (!await hasOrigin(active.url)) {
+      status('Store access needed: opening a tab to grant it. Then reopen StoreLift and press "Audit open store tabs" again.');
+      await openAccessPage(active.url, 'tabs');
+      return;
+    }
     const tabs = (await chrome.tabs.query({ currentWindow: true }))
       .filter(t => t?.id && !t.discarded && t.status === 'complete' && t.url && new URL(t.url).origin === origin)
       .slice(0, MAX_TABS);
@@ -133,7 +142,11 @@ async function verifyLinks() {
   try {
     const active = await activeTab();
     if (!Logic.isSameStore(active.url, state.current.url)) throw Error('Return to the audited store tab first.');
-    if (!await requestOrigin(state.current.url)) throw Error('Site permission declined; no HTTP requests made.');
+    if (!await hasOrigin(state.current.url)) {
+      status('Store access needed: opening a tab to grant it. Then reopen StoreLift and press "Verify internal links" again.');
+      await openAccessPage(state.current.url, 'links');
+      return;
+    }
     const urls = (state.current.linkCandidates || []).slice(0, 24);
     if (!urls.length) { status('No safe internal page links found to verify.'); return; }
     status(`Checking ${urls.length} public internal links with HEAD only (no cookies)...`);

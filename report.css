@@ -4,3 +4,7 @@
 
 /* Long evidence URLs must wrap inside the report card. */
 .issue p,.issue h3{overflow-wrap:anywhere}
+
+/* Store-access page opened from the popup (permission prompt must not run inside the popup). */
+.permission-page{max-width:640px}.permission-page .controls{margin-top:18px}.permission-page button:disabled{opacity:.55;cursor:default}
+.permission-page .controls button{background:#2368e9;color:#fff}
