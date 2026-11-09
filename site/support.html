@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support — StoreLift Theme QA Checker</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;color:#1e293b;line-height:1.7}
+  header{background:#1A1A2E;color:#fff;padding:2rem 1rem;text-align:center}
+  header h1{font-size:1.4rem;font-weight:700}
+  header p{color:#93c5fd;font-size:.9rem;margin-top:.3rem}
+  main{max-width:720px;margin:2rem auto;padding:0 1.5rem 4rem}
+  h2{font-size:1.1rem;font-weight:700;color:#1A1A2E;margin:2rem 0 .6rem;border-bottom:2px solid #e2e8f0;padding-bottom:.4rem}
+  p,li{font-size:.95rem;margin-bottom:.7rem}
+  ul{padding-left:1.4rem}
+  .cta{display:inline-block;background:#2563EB;color:#fff;padding:.6rem 1.4rem;border-radius:6px;text-decoration:none;font-weight:600;margin-top:.5rem}
+  .cta:hover{background:#1d4ed8}
+  .card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:1.2rem 1.4rem;margin:1rem 0}
+  footer{text-align:center;font-size:.8rem;color:#94a3b8;padding:2rem 1rem;border-top:1px solid #e2e8f0}
+</style>
+</head>
+<body>
+<header>
+  <h1>StoreLift — Shopify Theme QA Checker</h1>
+  <p>Support &amp; Help</p>
+</header>
+<main>
+
+<h2>Get help or report a bug</h2>
+<div class="card">
+  <p>The best way to get support is to open an issue on GitHub. Include the Chrome version, what page you were scanning, and what you expected vs what happened.</p>
+  <a class="cta" href="https://github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/issues/new">Open an Issue on GitHub</a>
+</div>
+
+<h2>Frequently asked questions</h2>
+
+<p><strong>Does the extension require a Shopify account or API key?</strong><br>
+No. It reads the publicly visible DOM of any page you have open in Chrome. No login, no token, no backend.</p>
+
+<p><strong>Does it work on password-protected or private storefronts?</strong><br>
+Only on pages you can already view in Chrome. If the storefront requires a password, log in first, then run the scan on the unlocked page.</p>
+
+<p><strong>Why does "Verify internal links" ask for host permission?</strong><br>
+To send HEAD requests to that store's URLs. The permission is scoped to that exact origin and is not stored permanently — Chrome will ask again next session unless you click "Always allow".</p>
+
+<p><strong>The score says 100 but I can see problems on the page — why?</strong><br>
+The score reflects only the checks the extension can detect automatically from the loaded DOM. JavaScript-rendered content, shadow DOM, lazy-loaded images, and anything that loads after the page finishes may be missed. Always manually verify findings before client delivery.</p>
+
+<p><strong>How do I delete all saved scan data?</strong><br>
+Open the extension popup → Session history → "Clear all sessions". All data is wiped from <code>chrome.storage.local</code> immediately.</p>
+
+<p><strong>Is this affiliated with Shopify?</strong><br>
+No. StoreLift Theme QA Checker is an independent developer tool. It is not affiliated with or endorsed by Shopify Inc.</p>
+
+<h2>Privacy policy</h2>
+<p>Read the full <a href="privacy.html">Privacy Policy</a>. Summary: no data leaves your browser, no tracking, no telemetry.</p>
+
+</main>
+<footer>
+  StoreLift Theme QA Checker &nbsp;·&nbsp; Browser-only, no backend, no tracking
+</footer>
+</body>
+</html>

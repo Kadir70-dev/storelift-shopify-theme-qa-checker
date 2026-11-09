@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — StoreLift Theme QA Checker</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;color:#1e293b;line-height:1.7}
+  header{background:#1A1A2E;color:#fff;padding:2rem 1rem;text-align:center}
+  header h1{font-size:1.4rem;font-weight:700;letter-spacing:-.02em}
+  header p{color:#93c5fd;font-size:.9rem;margin-top:.3rem}
+  main{max-width:720px;margin:2rem auto;padding:0 1.5rem 4rem}
+  h2{font-size:1.1rem;font-weight:700;color:#1A1A2E;margin:2rem 0 .6rem;border-bottom:2px solid #e2e8f0;padding-bottom:.4rem}
+  p,li{font-size:.95rem;margin-bottom:.7rem}
+  ul{padding-left:1.4rem}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;margin:1rem 0}
+  th,td{border:1px solid #e2e8f0;padding:.5rem .75rem;text-align:left}
+  th{background:#f1f5f9;font-weight:600}
+  .badge{display:inline-block;background:#dcfce7;color:#166534;border-radius:4px;padding:.1rem .5rem;font-size:.8rem;font-weight:600}
+  footer{text-align:center;font-size:.8rem;color:#94a3b8;padding:2rem 1rem;border-top:1px solid #e2e8f0}
+</style>
+</head>
+<body>
+<header>
+  <h1>StoreLift — Shopify Theme QA Checker</h1>
+  <p>Privacy Policy · Last updated: 2026-11-09</p>
+</header>
+<main>
+
+<h2>Overview</h2>
+<p>StoreLift Theme QA Checker ("the Extension") is a browser-only developer tool for quality-checking Shopify storefronts. <strong>No data leaves your browser.</strong> No backend server, no account, no telemetry.</p>
+
+<h2>What the Extension reads</h2>
+<p>When you run a scan, the Extension reads the already-loaded DOM of the active tab you clicked it on:</p>
+<ul>
+  <li>Page title, meta description, canonical URL, robots meta tag</li>
+  <li>H1 heading count</li>
+  <li>Image <code>src</code> and <code>alt</code> attributes (to detect missing alt text and broken images)</li>
+  <li>Anchor <code>href</code> attributes (to detect empty or non-navigating links)</li>
+  <li>Visible text content (to detect placeholder/demo text such as "Lorem ipsum")</li>
+  <li>JSON-LD structured data blocks</li>
+  <li>Presence of cart form and shipping/return link text</li>
+  <li>Viewport width at time of scan</li>
+</ul>
+<p>When you choose <strong>Verify internal links</strong>, the Extension sends HTTP HEAD requests to same-origin product, collection, page, and policy URLs to check for potential 404 responses. These requests go only to the Shopify store origin you are already viewing, use <code>credentials: 'omit'</code>, and carry no user session data.</p>
+
+<h2>What the Extension stores</h2>
+<p>Scan results (page URL, findings list, score, timestamps) are saved in <code>chrome.storage.local</code> — your browser's local extension storage, on your device only. Up to 24 sessions and 20 pages per session are retained.</p>
+<p><strong>No data is stored outside your device.</strong> You can delete all stored data at any time using the "Clear all sessions" button in the Extension popup.</p>
+
+<h2>What the Extension does NOT collect</h2>
+<ul>
+  <li>No personal information (name, email, account credentials)</li>
+  <li>No Shopify admin API tokens or store passwords</li>
+  <li>No payment or financial data</li>
+  <li>No browsing history beyond the tab you explicitly scan</li>
+  <li>No analytics, telemetry, or crash reporting</li>
+  <li>No cookies</li>
+</ul>
+
+<h2>Data transmission</h2>
+<p>The Extension does not transmit any data to any server operated by StoreLift or any third party.</p>
+<p>The only outbound network activity it may perform:</p>
+<ul>
+  <li><strong>HEAD requests to the scanned store's own origin</strong> — only when you use "Verify internal links"; these go to the Shopify store you are already viewing, not to any StoreLift server.</li>
+</ul>
+<p>There is no backend, no analytics endpoint, and no cloud sync.</p>
+
+<h2>Permissions</h2>
+<table>
+  <thead><tr><th>Permission</th><th>Why it is needed</th></tr></thead>
+  <tbody>
+    <tr><td><code>activeTab</code></td><td>Access the tab you clicked the Extension on</td></tr>
+    <tr><td><code>scripting</code></td><td>Read the already-loaded DOM of that tab (read-only)</td></tr>
+    <tr><td><code>storage</code></td><td>Save scan results locally in your browser</td></tr>
+    <tr><td>Optional <code>https://*</code> origin</td><td>Only requested when you choose "Audit open store tabs" or "Verify internal links"; grants access to that specific store origin only, for that session</td></tr>
+  </tbody>
+</table>
+
+<h2>Third-party services</h2>
+<p>The Extension does not integrate with, embed, or communicate with any third-party service.</p>
+
+<h2>Children's privacy</h2>
+<p>The Extension is a developer tool not directed at children. It does not knowingly collect any information from children under 13.</p>
+
+<h2>Changes to this policy</h2>
+<p>If the Extension's data practices change in a future version, this policy will be updated and the "Last updated" date above will reflect the change. Significant changes will be noted in the Chrome Web Store release notes.</p>
+
+<h2>Contact</h2>
+<p>For questions about this privacy policy or the Extension, open an issue at:<br>
+<a href="https://github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/issues">github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/issues</a></p>
+
+<p style="margin-top:2rem;font-size:.85rem;color:#64748b;"><em>StoreLift Theme QA Checker is an independent developer tool. It is not affiliated with or endorsed by Shopify Inc.</em></p>
+
+</main>
+<footer>
+  StoreLift Theme QA Checker &nbsp;·&nbsp; Browser-only, no backend, no tracking
+</footer>
+</body>
+</html>
