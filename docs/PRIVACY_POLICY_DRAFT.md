@@ -1,7 +1,9 @@
 # Privacy Policy — StoreLift Theme QA Checker
 
 **Last updated: 2026-11-09**
-**Owner approval required before publishing. Host at a live public URL before Chrome Web Store submission.**
+
+**Live URL:** https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/privacy.html
+*(GitHub Pages — allow 1–5 minutes after first deploy for page to go live)*
 
 ---
 
@@ -89,10 +91,8 @@ If the Extension's data practices change in a future version, this policy will b
 
 ## Contact
 
-**[OWNER ACTION REQUIRED: add your support contact before publishing]**
-
-For questions about this privacy policy or the Extension, contact:
-`[your-email@example.com]` or open an issue at `[your-github-repo/issues]`.
+For questions about this privacy policy or the Extension, open an issue at:
+https://github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/issues
 
 ---
 

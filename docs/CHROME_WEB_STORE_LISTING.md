@@ -114,27 +114,31 @@ English
 
 ---
 
-## Support URL (OWNER ACTION REQUIRED)
+## Support URL
 
-Must be a live public URL. Options:
-- GitHub repository Issues tab
-- A simple hosted page at storelift.io/support or similar
-- Email contact link
+```
+https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/support.html
+```
+
+(GitHub Issues also acceptable: https://github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/issues)
 
 ---
 
-## Privacy policy URL (OWNER ACTION REQUIRED)
+## Privacy policy URL
 
-Must be a live public URL. See `docs/PRIVACY_POLICY_DRAFT.md` for the draft.
-Host it at: `https://your-domain.com/privacy` or GitHub Pages.
+```
+https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/privacy.html
+```
+
+Hosted via GitHub Pages from `docs/privacy.html` on the main branch.
+*(Allow 1–5 minutes after first deploy for GitHub Pages to go live.)*
 
 ---
 
 ## Submission checklist
 
-- [ ] Real 1280×800 screenshots captured on live Chrome
-- [ ] Privacy policy URL live and publicly accessible
-- [ ] Support contact URL live
+- [ ] GitHub Pages live — verify https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/privacy.html loads in browser
+- [ ] Real 1280×800 screenshots captured on desktop Chrome (see screenshot instructions above)
 - [ ] Chrome Web Store developer account created ($5 one-time fee)
 - [ ] Extension ZIP verified with `python3 build_release.py --test`
 - [ ] Final owner review and approval of listing text
