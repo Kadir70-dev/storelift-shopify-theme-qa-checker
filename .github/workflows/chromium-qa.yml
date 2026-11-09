@@ -1,0 +1,54 @@
+name: Extension QA — Chromium Desktop
+on:
+  push:
+    branches: [main, 'ci/**', 'feat/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chromium-qa:
+    name: Unit, packaging, and real Chromium fixture QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Node logic unit tests (77 assertions expected)
+        run: node tests/logic.test.cjs
+      - name: ZIP packaging + regression checks
+        run: python3 build_release.py --test
+      - name: Install desktop Chromium for Playwright
+        run: |
+          python3 -m pip install 'playwright==1.56.0'
+          python3 -m playwright install --with-deps chromium
+      - name: Browser fixture tests — fail rather than skip
+        env:
+          SKIP_BROWSER_QA: '0'
+        run: |
+          python3 - <<'PY'
+          import importlib.util
+          assert importlib.util.find_spec('playwright'), 'Playwright missing: fail CI'
+          PY
+          python3 tests/browser_qa.py
+      - name: Inspect distributable ZIP
+        run: |
+          python3 build_release.py --verify dist/storelift-theme-qa-checker-v0.2.0.zip
+          unzip -l dist/storelift-theme-qa-checker-v0.2.0.zip
+      - name: Save tested ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: storelift-qa-verified-extension-zip
+          path: dist/storelift-theme-qa-checker-v0.2.0.zip
+          if-no-files-found: error
+          retention-days: 14
