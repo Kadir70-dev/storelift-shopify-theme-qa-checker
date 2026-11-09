@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>StoreLift Theme QA</title><link rel="stylesheet" href="style.css"></head>
+<body><main class="app">
+<header class="top"><span class="logo" aria-hidden="true">▥</span><div><strong>storelift<span class="blue">.</span></strong><small>Shopify Theme QA Checker</small></div><span class="local">BROWSER ONLY</span></header>
+<section class="hero"><span class="eyebrow">PRE-LAUNCH QUALITY CONTROL</span><h1>Ship a better<br><em>storefront.</em></h1><p>Inspect real storefront pages and build a professional client handover report.</p>
+<div class="hero-buttons"><button type="button" class="btn primary" id="scan">Scan current page</button><button type="button" class="btn secondary" id="scan-tabs">Audit open store tabs</button></div>
+<p class="fine">Read-only • No server • Open tabs only • Never checks out</p></section>
+<div id="status" class="status" role="status" aria-live="polite">Open a Shopify storefront and run a user-initiated audit.</div>
+<section id="results" class="hidden">
+<div class="summary"><div class="score"><span>QA heuristic</span><strong id="score">—</strong><small>/ 100</small></div><div class="stats"><span id="site" class="domain">—</span><p><b id="issue-count">—</b> findings on current page</p><p class="muted" id="scanned-at"></p></div></div>
+<p class="disclaimer">This is a DOM heuristic, not PageSpeed, Lighthouse, ranking or conversion performance.</p>
+<div class="metrics"><div><small>Images that failed</small><strong id="bad-img-count">—</strong></div><div><small>Missing alt</small><strong id="alt-count">—</strong></div><div><small>Non-navigating links</small><strong id="link-count">—</strong></div><div><small>Current viewport</small><strong id="viewport">—</strong></div><div><small>Product control</small><strong id="cart-status">—</strong></div><div><small>Product JSON-LD</small><strong id="schema-status">—</strong></div></div>
+<div class="section-head"><h2>Findings from current page</h2><span id="found-label">DOM audit</span></div><div id="findings"></div>
+<div class="actions"><button type="button" class="btn light" id="verify-links">Verify internal links (HEAD)</button><button type="button" class="btn dark" id="save">Save old-style snapshot</button></div>
+</section>
+<section id="session-section" class="hidden"><div class="section-head"><h2>Agency handover session</h2><span id="session-host">—</span></div>
+<div class="session-stats"><div><small>Pages audited</small><strong id="page-count">0</strong></div><div><small>Total findings</small><strong id="total-findings">0</strong></div><div><small>Needs manual review</small><strong id="review-findings">0</strong></div></div>
+<div class="session-pages" id="session-pages"></div>
+<div class="section-head"><h2>Client checklist</h2><span>Human verification</span></div><div id="checklist" class="checklist"></div>
+<div class="actions"><button type="button" class="btn dark" id="full-report">Agency report / PDF</button><button type="button" class="btn light" id="export">Export JSON</button></div>
+<div class="actions compact"><button type="button" class="btn text" id="new-session">New handover session</button><button type="button" class="btn text danger" id="clear">Delete local audits</button></div></section>
+<section class="history"><div class="section-head"><h2>Older saved snapshots</h2><span>On this browser</span></div><div id="history-list" class="history-list"></div><div id="compare" class="compare hidden"></div></section>
+<footer>INDEPENDENT TOOL · NOT AFFILIATED WITH SHOPIFY · NO BACKGROUND CRAWLING</footer>
+</main><script src="logic.js"></script><script src="popup.js"></script></body></html>
