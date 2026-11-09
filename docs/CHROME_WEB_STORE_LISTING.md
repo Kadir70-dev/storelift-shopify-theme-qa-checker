@@ -101,6 +101,19 @@ English
 
 ---
 
+## Privacy tab — single purpose and permission justifications
+
+**Single purpose:** Run user-initiated, read-only quality checks on the Shopify storefront page(s) the user has open and produce a local handover report.
+
+| Permission | Justification |
+|---|---|
+| `activeTab` | Reads the storefront tab only after the user clicks the extension and presses "Scan current page". |
+| `scripting` | Injects the bundled `collector.js` into that tab to read the already-loaded DOM (images, links, headings, meta). Nothing is modified. |
+| `storage` | Saves audit sessions, checklist choices and notes locally (`chrome.storage.local`) so the user can build and reopen a handover report. |
+| Optional host permissions (`https://*/*`, `http://*/*`) | Requested at runtime for one store origin only, when the user chooses "Audit open store tabs" (to read other already-open tabs of the same store) or "Verify internal links" (HEAD requests to that store's own URLs). Never requested at install. |
+
+**Remote code:** No. All JavaScript is packaged in the extension; no eval, no remotely hosted scripts.
+
 ## Privacy practices questionnaire (answer honestly)
 
 | Question | Answer | Notes |
@@ -141,13 +154,27 @@ Hosted via GitHub Pages from `docs/privacy.html` on the main branch.
 |---|---|---|
 | Node.js unit tests | 77/77 PASS | local + ubuntu-latest CI |
 | ZIP packaging regression | 21/21 PASS | local + ubuntu-latest CI |
-| Chromium fixture tests (Playwright) | 18/18 PASS | ubuntu-latest CI (real Chromium, NOT skipped) |
+| Chromium fixture tests (Playwright) | 19/19 PASS | ubuntu-latest CI (real Chromium, NOT skipped) |
 | Broken-image detection (404 routing) | PASS | ubuntu-latest CI |
 | Security: no external requests from collector | PASS | ubuntu-latest CI |
 | All 14 ZIP files byte-identical between CI artifact and local build | PASS | verified |
 
-CI run: https://github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/actions/runs/42676274957
-Commit SHA: `11ebda6` (merge commit of PR #1 into main)
+CI run: https://github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/actions/runs/42703662483
+Commit SHA: `9f94bed` (PR #3, merged as `ad68778`)
+
+## Live-store test evidence (installed extension — 2026-11-10)
+
+Release ZIP `storelift-theme-qa-checker-v0.2.0.zip` (SHA-256 `2bcf3bd2b7cd60e2a1812e1af9949f2c39f7b2997688fd6b2131ff9c9a3b7bae`) unpacked and loaded in Chromium 156 (headless). Toolbar clicks were simulated with the DevTools `Extensions.triggerAction` command, which grants `activeTab` like a real click; the popup's own "Scan current page" button ran the scan.
+
+| Check | Store | Result |
+|---|---|---|
+| Scan current page | www.allbirds.com (home) | Shopify detected, score 92, 2 findings (lazy images, empty policy links) |
+| Scan current page | www.gymshark.com (home) | Shopify detected, score 92, 2 findings (missing alt 44/233, lazy images) |
+| Handover report page | both | Rendered with live data |
+| Report → PDF | allbirds | Printed via Chromium's print-to-PDF (same engine as "Save as PDF") |
+| Audit open store tabs | allbirds (3 tabs) | **Not verified.** The popup closed when Chrome showed the host-permission prompt in headless mode; no permission was granted. Needs a manual check in desktop Chrome. |
+
+Bugs found by this run and fixed in PR #3: a hidden Bing UET beacon was reported as a HIGH broken image (Gymshark score 78 → 92 after fix), and long evidence URLs widened the popup to 743 px.
 
 ---
 
