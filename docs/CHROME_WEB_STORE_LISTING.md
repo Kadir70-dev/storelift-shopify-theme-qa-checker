@@ -172,7 +172,11 @@ Release ZIP `storelift-theme-qa-checker-v0.2.0.zip` (SHA-256 `2bcf3bd2b7cd60e2a1
 | Scan current page | www.gymshark.com (home) | Shopify detected, score 92, 2 findings (missing alt 44/233, lazy images) |
 | Handover report page | both | Rendered with live data |
 | Report → PDF | allbirds | Printed via Chromium's print-to-PDF (same engine as "Save as PDF") |
-| Audit open store tabs | allbirds (3 tabs) | **Not verified.** The popup closed when Chrome showed the host-permission prompt in headless mode; no permission was granted. Needs a manual check in desktop Chrome. |
+| Audit open store tabs — no access yet | allbirds | Popup no longer requests permission itself (Chrome closes the popup when the prompt opens, which dropped the request). It opens `permission.html` for `https://www.allbirds.com`; the user grants access there, then presses the button again. Verified that the page opens with the right store. |
+| Audit open store tabs — access granted | allbirds (3 open tabs) | "3 open tabs audited; 0 skipped" (/, /collections/mens, /pages/our-story). Tested with a test-only copy whose manifest pre-grants allbirds access. |
+| Chrome's own permission prompt on `permission.html` | — | **Not automatable** (browser UI). Confirm once by hand in desktop Chrome: Allow → reopen StoreLift → Audit open store tabs. |
+
+Multi-tab permission flow fixed in PR #5 (`permission.html`/`permission.js`; same flow for "Verify internal links").
 
 Bugs found by this run and fixed in PR #3: a hidden Bing UET beacon was reported as a HIGH broken image (Gymshark score 78 → 92 after fix), and long evidence URLs widened the popup to 743 px.
 

@@ -29,6 +29,8 @@ RELEASE_FILES = [
     "popup.html",
     "report.js",
     "report.html",
+    "permission.js",
+    "permission.html",
     "style.css",
     "report.css",
     "README.md",
@@ -116,7 +118,7 @@ def verify(zip_path: Path, run_tests: bool = False) -> bool:
         else:
             fail("No unexpected nested subdirectories", str(nested))
 
-        # 3. All 14 required files present.
+        # 3. All required release files present.
         expected = set(RELEASE_FILES)
         present = names & expected
         if present == expected:
@@ -199,7 +201,7 @@ def verify(zip_path: Path, run_tests: bool = False) -> bool:
             fail("logic.js readable", str(e))
 
         # 11. No telemetry / fetch to external hosts in JS files.
-        for js_file in ["collector.js", "logic.js", "popup.js", "report.js"]:
+        for js_file in ["collector.js", "logic.js", "popup.js", "report.js", "permission.js"]:
             try:
                 src = zf.read(js_file).decode()
                 # Allow fetch only inside collector for HEAD link checks (same-origin, credentials:omit)
@@ -215,7 +217,7 @@ def verify(zip_path: Path, run_tests: bool = False) -> bool:
                 fail(f"{js_file} readable", str(e))
 
         # 12. No inline event handlers in HTML that bypass CSP.
-        for html_file in ["popup.html", "report.html"]:
+        for html_file in ["popup.html", "report.html", "permission.html"]:
             try:
                 src = zf.read(html_file).decode()
                 inline = re.findall(r'\bon\w+\s*=\s*["\']', src, re.I)
