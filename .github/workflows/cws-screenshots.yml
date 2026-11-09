@@ -1,0 +1,29 @@
+name: StoreLift desktop extension screenshot QA
+on:
+  workflow_dispatch:
+  push:
+    branches: ['ci/desktop-cws-screenshots']
+permissions:
+  contents: read
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Chromium and Playwright
+        run: |
+          python3 -m pip install playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+      - name: Capture genuine extension UI with demo fixture data
+        run: python3 tests/cws_screenshots.py
+      - name: Upload review-only screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: storelift-extension-ui-screenshots-FIXTURE-DEMO
+          path: dist/screenshots/*.png
+          if-no-files-found: error
+          retention-days: 14
