@@ -135,11 +135,62 @@ Hosted via GitHub Pages from `docs/privacy.html` on the main branch.
 
 ---
 
+## CI / Test evidence (automated — verified 2026-11-09)
+
+| Test suite | Result | Environment |
+|---|---|---|
+| Node.js unit tests | 77/77 PASS | local + ubuntu-latest CI |
+| ZIP packaging regression | 21/21 PASS | local + ubuntu-latest CI |
+| Chromium fixture tests (Playwright) | 18/18 PASS | ubuntu-latest CI (real Chromium, NOT skipped) |
+| Broken-image detection (404 routing) | PASS | ubuntu-latest CI |
+| Security: no external requests from collector | PASS | ubuntu-latest CI |
+| All 14 ZIP files byte-identical between CI artifact and local build | PASS | verified |
+
+CI run: https://github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/actions/runs/42676274957
+Commit SHA: `11ebda6` (merge commit of PR #1 into main)
+
+---
+
 ## Submission checklist
 
-- [ ] GitHub Pages live — verify https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/privacy.html loads in browser
-- [ ] Real 1280×800 screenshots captured on desktop Chrome (see screenshot instructions above)
-- [ ] Chrome Web Store developer account created ($5 one-time fee)
-- [ ] Extension ZIP verified with `python3 build_release.py --test`
-- [ ] Final owner review and approval of listing text
-- [ ] Submit for Chrome review (typically 1–3 business days)
+- [x] GitHub Pages privacy policy live: https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/privacy.html
+- [x] GitHub Pages support page live: https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/support.html
+- [x] CI green on ubuntu-latest with real Chromium (PR #1 merged, run 42676274957)
+- [x] Extension ZIP built and verified: `dist/storelift-theme-qa-checker-v0.2.0.zip` (24.7 KB)
+- [ ] Real 1280×800 screenshots captured on desktop Chrome (see screenshot instructions above) — **owner action required**
+- [ ] Chrome Web Store developer account created ($5 one-time fee) — **owner action required**
+- [ ] Final owner review and approval of listing text — **owner action required**
+- [ ] Submit for Chrome review (typically 1–3 business days) — **owner action required**
+
+---
+
+## CWS Submission — step-by-step instructions
+
+**Prerequisites already complete:**
+- ZIP at `dist/storelift-theme-qa-checker-v0.2.0.zip` (24.7 KB, 14 files, all tests passing)
+- Privacy policy URL: `https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/privacy.html`
+- Support URL: `https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/support.html`
+
+**Steps (owner must complete):**
+
+1. **Register** at https://chrome.google.com/webstore/devconsole — pay $5 one-time developer fee
+2. Click **New Item** → drag and drop `dist/storelift-theme-qa-checker-v0.2.0.zip`
+3. **Store listing tab:**
+   - Name: `StoreLift — Shopify Theme QA Checker`
+   - Short description: paste from `CHROME_WEB_STORE_LISTING.md`
+   - Detailed description: paste from `CHROME_WEB_STORE_LISTING.md`
+   - Category: **Developer Tools**
+   - Language: English
+   - Upload screenshots (5 × 1280×800, see instructions in this doc)
+4. **Privacy practices tab:**
+   - Privacy policy URL: `https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/privacy.html`
+   - Answer all questions as documented in the Privacy practices table above
+5. **Store listing tab → Support URL:**
+   - `https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/support.html`
+6. Click **Submit for Review**
+
+**What cannot be verified without a desktop:**
+- Live Shopify storefront scanning behaviour (requires Chrome + real store)
+- 1280×800 screenshots (requires desktop Chrome)
+- Extension popup UI, permission prompts, multi-tab audit flow
+- Client report PDF export
