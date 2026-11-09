@@ -14,6 +14,8 @@
 <img src="https://testshop.myshopify.com/broken-404.jpg" alt="" id="broken-img" width="100" height="100">
 <!-- Image without alt attribute at all -->
 <img src="https://testshop.myshopify.com/no-alt.jpg" width="100" height="100">
+<!-- Hidden analytics beacon (like Bing UET #batBeacon): its failed load must not count as a broken storefront image. -->
+<img id="batBeacon123" src="https://testshop.myshopify.com/beacon-404.gif" alt="" width="0" height="0" style="display:none">
 <!-- Empty anchor -->
 <a href="">Click here</a>
 <!-- Hash anchor that's not a button -->
