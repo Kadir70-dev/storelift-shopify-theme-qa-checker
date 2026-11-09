@@ -36,10 +36,7 @@ jobs:
         env:
           SKIP_BROWSER_QA: '0'
         run: |
-          python3 - <<'PY'
-          import importlib.util
-          assert importlib.util.find_spec('playwright'), 'Playwright missing: fail CI'
-          PY
+          python3 -c "import importlib.util; spec=importlib.util.find_spec('playwright'); assert spec is not None, 'Playwright import missing — install step failed'"
           python3 tests/browser_qa.py
       - name: Inspect distributable ZIP
         run: |
