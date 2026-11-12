@@ -42,12 +42,12 @@ jobs:
           python3 tests/browser_qa.py
       - name: Inspect distributable ZIP
         run: |
-          python3 build_release.py --verify dist/storelift-theme-qa-checker-v0.2.0.zip
-          unzip -l dist/storelift-theme-qa-checker-v0.2.0.zip
+          python3 build_release.py --verify dist/storelift-theme-qa-checker-v*.zip
+          unzip -l dist/storelift-theme-qa-checker-v*.zip
       - name: Save tested ZIP
         uses: actions/upload-artifact@v4
         with:
           name: storelift-qa-verified-extension-zip
-          path: dist/storelift-theme-qa-checker-v0.2.0.zip
+          path: dist/storelift-theme-qa-checker-v*.zip
           if-no-files-found: error
           retention-days: 14
