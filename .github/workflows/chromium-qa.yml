@@ -26,6 +26,8 @@ jobs:
           python-version: '3.12'
       - name: Node logic unit tests (77 assertions expected)
         run: node tests/logic.test.cjs
+      - name: Licence logic unit tests (mocked API, no network)
+        run: node tests/license.test.cjs
       - name: ZIP packaging + regression checks
         run: python3 build_release.py --test
       - name: Install desktop Chromium for Playwright

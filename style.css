@@ -4,3 +4,4 @@
 
 /* Long evidence (tracking URLs, selectors) must wrap inside the 430px popup. */
 .finding p,.finding strong{overflow-wrap:anywhere}
+.plan{margin-left:auto;border:1px solid #d4e2f8;border-radius:100px;background:#eef4ff;color:#1d5bcc;padding:6px 10px;font-size:9px;font-weight:850;letter-spacing:.06em}.plan:hover{background:#e0ebff}.plan.pro{background:#ecf6ef;border-color:#d4edda;color:#338050}.plan:focus-visible,.btn:focus-visible{outline:2px solid #397dff;outline-offset:2px}.btn.locked::after{content:' · PRO';font-size:9px;letter-spacing:.06em;opacity:.75}

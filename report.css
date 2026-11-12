@@ -8,3 +8,5 @@
 /* Store-access page opened from the popup (permission prompt must not run inside the popup). */
 .permission-page{max-width:640px}.permission-page .controls{margin-top:18px}.permission-page button:disabled{opacity:.55;cursor:default}
 .permission-page .controls button{background:#2368e9;color:#fff}
+.licence-page section{margin-top:30px}.plan-table td:not(:first-child),.plan-table th:not(:first-child){text-align:center;width:70px}.field{display:block;font-size:12px;color:#5d7390;font-weight:650}.field input{display:block;width:100%;margin-top:6px;padding:11px 12px;border:1px solid #cfdcec;border-radius:8px;font:13px ui-monospace,monospace}.field input:focus{outline:2px solid #2368e9;outline-offset:1px}.licence-page .controls{align-items:center;flex-wrap:wrap}.licence-page .controls button.secondary{background:#fff;color:#b42318;border:1px solid #f1c4c0}.licence-page .controls a{font-size:12px;color:#1c63d8}.licence-page #result{font-weight:650;color:#1b2d44}
+.licence-page #result{margin-top:12px}

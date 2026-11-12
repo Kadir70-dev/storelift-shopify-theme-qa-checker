@@ -13,13 +13,18 @@ StoreLift — Shopify Theme QA Checker
 
 ### Short description (≤ 132 chars)
 ```
-User-initiated Shopify storefront QA: check pages, produce a client handover report. No backend, no account.
+Shopify storefront QA: check pages, build a client handover report. Free core; Pro licence unlocks agency features.
 ```
 
 ### Detailed description (≤ 16,383 chars)
 
 ```
-StoreLift — Shopify Theme QA Checker is a standalone browser-only quality-control tool for Shopify theme developers and digital agencies. No VPS, backend, AI, Shopify admin token, or login required.
+StoreLift — Shopify Theme QA Checker is a standalone browser-only quality-control tool for Shopify theme developers and digital agencies. No StoreLift server, AI, Shopify admin token, or login required.
+
+FREE AND PRO
+StoreLift is free to install and use. The free plan includes every page check, findings with evidence, the manual handover checklist and up to 3 pages per handover session.
+
+StoreLift Pro is an optional paid licence, bought outside the Chrome Web Store on a Lemon Squeezy checkout ([OWNER: price and plan, e.g. "one-time payment of $X"]). Pro unlocks: Audit open store tabs, Verify internal links, the agency handover report with Save as PDF, JSON/CSV export and 20 pages per session. These features are marked "PRO" in the extension and open the plan page instead of running on the free plan.
 
 HOW IT WORKS
 Open a public Shopify storefront in Chrome, then click the extension. Everything runs locally in your browser.
@@ -58,7 +63,7 @@ PERMISSIONS
 • storage — saves audit sessions locally in your browser
 • Optional https://* origin — only requested when you choose "Audit open store tabs" or "Verify internal links"; grants access to that specific store origin only
 
-No background scripts. No cross-origin data collection. No tracking or telemetry. Reports stay on your device.
+No background scripts. No cross-origin data collection. No tracking or telemetry. Reports stay on your device. If you activate Pro, only your licence key is sent to Lemon Squeezy to confirm it (about weekly).
 
 INDEPENDENT TOOL. NOT AFFILIATED WITH SHOPIFY.
 ```
@@ -118,7 +123,9 @@ English
 
 | Question | Answer | Notes |
 |---|---|---|
-| Does the extension collect user data? | No | No data leaves the browser |
+| Data categories to tick | **Authentication information** (licence key) | Only when the user activates Pro. Nothing else: no PII, web history, website content or user activity is sent. Payment details are entered on Lemon Squeezy's checkout page, not in the extension. |
+| Purpose of that data | Core functionality (licence verification) | Sent to api.lemonsqueezy.com on activate/check/deactivate and weekly while Pro is active |
+| Does the extension collect user data? | Only the licence key above | Audit data never leaves the browser |
 | Does it transmit personal data? | No | — |
 | Does it use the data for purposes other than the core function? | No | — |
 | Is data encrypted in transit? | N/A | No data transmitted |
@@ -181,6 +188,36 @@ Multi-tab permission flow fixed in PR #5 (`permission.html`/`permission.js`; sam
 Bugs found by this run and fixed in PR #3: a hidden Bing UET beacon was reported as a HIGH broken image (Gymshark score 78 → 92 after fix), and long evidence URLs widened the popup to 743 px.
 
 ---
+
+## Paid launch (v0.3.0)
+
+Chrome Web Store payments (paid items, in-app purchases, free trials) were shut down: no new paid items since 2020 and no charging through CWS since 1 Feb 2021. Monetisation through an outside payment provider is allowed, but the listing must disclose the paywall (done in the description above). Licensing is implemented with Lemon Squeezy (merchant of record: it handles VAT/sales tax and invoices, and its License API needs no StoreLift server).
+
+### Pricing options (owner decides — nothing is set in code)
+
+| Option | Example | Pros | Cons |
+|---|---|---|---|
+| A. One-time "Lifetime" | $29, 3 browsers | Simplest to sell to freelancers; no renewals or cancellations to handle; matches a small local tool | No recurring revenue |
+| B. Yearly subscription | $39/year, 3 browsers | Recurring revenue; funds updates | Harder sell for a small tool; renewals/cancel flows |
+| C. Agency licence (add-on to A or B) | $79–99, 10 browsers | Agencies pay more for seats | One more product to manage |
+
+Recommendation: start with **A** (plus **C** if agencies ask), because the tool has no server cost and the audience is freelancers and small agencies. Revisit B when there is a steady release cadence. Lemon Squeezy fees are about 5% + $0.50 per order, plus extra for some international/PayPal payments; confirm current fees when you sign up.
+
+### What the owner must provide
+
+1. **Plan and price:** option A/B/C, price, currency and browser activation limit.
+2. **Lemon Squeezy account:** sign up, complete identity verification and store activation review, and add a payout method (bank or PayPal; check that your country is supported).
+3. **Product:** create "StoreLift Pro" with *license keys enabled* and the activation limit above (for B, keys expire with the subscription). Then send: **store ID**, **product ID(s)**, **checkout (Buy) link**.
+4. **Seller details for the policies:** legal name, business address/country, support email, governing-law jurisdiction, refund window (recommendation: 14 days, no questions asked).
+5. **Approval** of the final listing text, and the go-ahead for the visibility change (currently *Published – unlisted*).
+
+### Steps once those are in
+
+1. Fill `license-config.js` (`storeId`, `productIds`, `checkoutUrl`, `priceLabel`) and the `[OWNER: …]` placeholders in `docs/privacy.html`, `terms.html`, `refund.html`, `support.html`, and in the description above.
+2. `python3 build_release.py --release && python3 build_release.py --test`; this refuses to build while anything is missing.
+3. Make one real purchase in Lemon Squeezy test mode. Activate the key in the extension, refund it, and confirm Pro turns off on "Check again".
+4. Merge to `main` (publishes the policy pages on GitHub Pages).
+5. CWS dashboard: upload the v0.3.0 ZIP, update the description and the Privacy tab (data category above, privacy URL), add terms/refund links to the description, and submit for review. **Do not change the visibility until the owner approves.**
 
 ## Submission checklist
 
