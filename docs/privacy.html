@@ -24,12 +24,12 @@
 <body>
 <header>
   <h1>StoreLift — Shopify Theme QA Checker</h1>
-  <p>Privacy Policy · Last updated: 2026-11-09</p>
+  <p>Privacy Policy · Last updated: 13 November 2026</p>
 </header>
 <main>
 
 <h2>Overview</h2>
-<p>StoreLift Theme QA Checker ("the Extension") is a browser-only developer tool for quality-checking Shopify storefronts. <strong>No data leaves your browser.</strong> No backend server, no account, no telemetry.</p>
+<p>StoreLift Theme QA Checker ("the Extension") is a browser-only developer tool for quality-checking Shopify storefronts. It is provided by StoreLift ("we"). <strong>Your audit data never leaves your browser.</strong> There is no StoreLift server, no account and no telemetry. The only outside request the Extension itself makes is the optional StoreLift Pro licence check described below.</p>
 
 <h2>What the Extension reads</h2>
 <p>When you run a scan, the Extension reads the already-loaded DOM of the active tab you clicked it on:</p>
@@ -49,9 +49,21 @@
 <p>Scan results (page URL, findings list, score, timestamps) are saved in <code>chrome.storage.local</code> — your browser's local extension storage, on your device only. Up to 24 sessions and 20 pages per session are retained.</p>
 <p><strong>No data is stored outside your device.</strong> You can delete all stored data at any time using the "Clear all sessions" button in the Extension popup.</p>
 
+<h2>StoreLift Pro licence (optional)</h2>
+<p>The core features are free. If you buy StoreLift Pro and activate it in the Extension:</p>
+<ul>
+  <li><strong>What is sent:</strong> your licence key and a random label for this browser (for example "StoreLift Chrome 3f9a1c2b"), and on later checks the activation ID Lemon Squeezy returned. Nothing about the stores, pages or reports you audit is ever sent.</li>
+  <li><strong>Where:</strong> <code>api.lemonsqueezy.com</code>, the licence service of Lemon Squeezy, without cookies.</li>
+  <li><strong>When:</strong> only when you press Activate, Check again or Deactivate, and automatically about once every 7 days while a Pro licence is stored, to confirm it is still valid (for example, not refunded).</li>
+  <li><strong>What is stored locally:</strong> the licence key, its status, its expiry date (if any), the activation ID and the time of the last check, in <code>chrome.storage.local</code>. Your name and email are not stored by the Extension. "Deactivate on this browser" deletes this record.</li>
+</ul>
+<h2>Purchases</h2>
+<p>StoreLift Pro is sold through Lemon Squeezy, which acts as merchant of record: it runs the checkout, takes payment, handles sales tax/VAT, issues invoices and emails your licence key. Your payment details go to Lemon Squeezy and its payment processors, never to us or the Extension. Lemon Squeezy's handling of your data is covered by <a href="https://www.lemonsqueezy.com/privacy">its privacy policy</a>.</p>
+<p>As the seller, we receive from Lemon Squeezy the order details needed to provide and support your licence: your name, email address, country, what you bought and when, and the licence status. We use them only for licence support, refunds, receipts and legal/tax record keeping, never for advertising, and we do not sell them. We keep them for as long as the law requires for tax records, and otherwise delete them on request.</p>
+
 <h2>What the Extension does NOT collect</h2>
 <ul>
-  <li>No personal information (name, email, account credentials)</li>
+  <li>No personal information (name, email, account credentials) inside the Extension</li>
   <li>No Shopify admin API tokens or store passwords</li>
   <li>No payment or financial data</li>
   <li>No browsing history beyond the tab you explicitly scan</li>
@@ -60,12 +72,13 @@
 </ul>
 
 <h2>Data transmission</h2>
-<p>The Extension does not transmit any data to any server operated by StoreLift or any third party.</p>
+<p>The Extension does not transmit audit data to any server operated by StoreLift or any third party.</p>
 <p>The only outbound network activity it may perform:</p>
 <ul>
+  <li><strong>Licence checks to <code>api.lemonsqueezy.com</code></strong>: only if you activate StoreLift Pro, as described above.</li>
   <li><strong>HEAD requests to the scanned store's own origin</strong> — only when you use "Verify internal links"; these go to the Shopify store you are already viewing, not to any StoreLift server.</li>
 </ul>
-<p>There is no backend, no analytics endpoint, and no cloud sync.</p>
+<p>There is no StoreLift backend, no analytics endpoint and no cloud sync.</p>
 
 <h2>Permissions</h2>
 <table>
@@ -79,7 +92,7 @@
 </table>
 
 <h2>Third-party services</h2>
-<p>The Extension does not integrate with, embed, or communicate with any third-party service.</p>
+<p>The Extension communicates with one third-party service, and only for StoreLift Pro: the Lemon Squeezy licence API. Clicking "Buy StoreLift Pro" opens Lemon Squeezy's checkout page in a normal browser tab.</p>
 
 <h2>Children's privacy</h2>
 <p>The Extension is a developer tool not directed at children. It does not knowingly collect any information from children under 13.</p>
@@ -87,15 +100,18 @@
 <h2>Changes to this policy</h2>
 <p>If the Extension's data practices change in a future version, this policy will be updated and the "Last updated" date above will reflect the change. Significant changes will be noted in the Chrome Web Store release notes.</p>
 
+<h2>Your choices</h2>
+<p>You can use every free feature without ever contacting a licence server. You can deactivate Pro on a browser at any time, delete all audits from the Extension, or ask us to delete purchase records we are not legally required to keep.</p>
+
 <h2>Contact</h2>
-<p>For questions about this privacy policy or the Extension, open an issue at:<br>
+<p>Privacy and licence questions: <a href="mailto:kadirab1999@gmail.com">kadirab1999@gmail.com</a>. Product issues can also be reported at:<br>
 <a href="https://github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/issues">github.com/Kadir70-dev/storelift-shopify-theme-qa-checker/issues</a></p>
 
 <p style="margin-top:2rem;font-size:.85rem;color:#64748b;"><em>StoreLift Theme QA Checker is an independent developer tool. It is not affiliated with or endorsed by Shopify Inc.</em></p>
 
 </main>
 <footer>
-  StoreLift Theme QA Checker &nbsp;·&nbsp; Browser-only, no backend, no tracking
+  StoreLift Theme QA Checker &nbsp;·&nbsp; Browser-only audits, no tracking &nbsp;·&nbsp; <a href="terms.html">Terms</a> &nbsp;·&nbsp; <a href="refund.html">Refunds</a>
 </footer>
 </body>
 </html>

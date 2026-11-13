@@ -31,6 +31,10 @@ RELEASE_FILES = [
     "report.html",
     "permission.js",
     "permission.html",
+    "license-config.js",
+    "license.js",
+    "license-page.js",
+    "license.html",
     "style.css",
     "report.css",
     "README.md",
@@ -53,6 +57,32 @@ FORBIDDEN_PATTERNS = [
     r"dist/",
     r"build_release\.py",
 ]
+
+
+JS_FILES = ["collector.js", "logic.js", "popup.js", "report.js", "permission.js",
+            "license-config.js", "license.js", "license-page.js"]
+
+# Lemon Squeezy (licence API, checkout, order portal) and the GitHub Pages
+# policy site. `<store>` is the checkout placeholder used in comments.
+ALLOWED_URL_HOSTS = re.compile(r"([a-z0-9-]+\.)?lemonsqueezy\.com|kadir70-dev\.github\.io|<store>\.lemonsqueezy\.com|localhost")
+
+
+def license_config_issues() -> list[str]:
+    """Owner-supplied seller settings that must exist before a paid release."""
+    src = (ROOT / "license-config.js").read_text()
+    issues = []
+    if not re.search(r"storeId:\s*[1-9]\d*\s*,", src):
+        issues.append("storeId is not set")
+    if not re.search(r"productIds:\s*\[\s*[1-9]\d*", src):
+        issues.append("productIds is empty")
+    if not re.search(r"checkoutUrl:\s*'https://[a-z0-9-]+\.lemonsqueezy\.com/(buy|checkout)/[A-Za-z0-9-]+", src):
+        issues.append("checkoutUrl is not a Lemon Squeezy checkout link")
+    if not re.search(r"priceLabel:\s*'[^']+'", src):
+        issues.append("priceLabel is empty")
+    for doc in ["privacy.html", "terms.html", "refund.html", "support.html"]:
+        if "[OWNER" in (ROOT / "docs" / doc).read_text():
+            issues.append(f"docs/{doc} still has [OWNER: ...] placeholders")
+    return issues
 
 
 def read_manifest() -> dict:
@@ -201,7 +231,7 @@ def verify(zip_path: Path, run_tests: bool = False) -> bool:
             fail("logic.js readable", str(e))
 
         # 11. No telemetry / fetch to external hosts in JS files.
-        for js_file in ["collector.js", "logic.js", "popup.js", "report.js", "permission.js"]:
+        for js_file in JS_FILES:
             try:
                 src = zf.read(js_file).decode()
                 # Allow fetch only inside collector for HEAD link checks (same-origin, credentials:omit)
@@ -216,8 +246,29 @@ def verify(zip_path: Path, run_tests: bool = False) -> bool:
             except Exception as e:
                 fail(f"{js_file} readable", str(e))
 
+        # 11b. Every hard-coded URL points at an allowed host (licensing + docs only).
+        for js_file in JS_FILES:
+            try:
+                hosts = set(re.findall(r'https?://([A-Za-z0-9.<>-]+)', zf.read(js_file).decode()))
+                stray = sorted(h for h in hosts if not ALLOWED_URL_HOSTS.fullmatch(h))
+                if not stray:
+                    ok(f"{js_file}: URLs only to allowed hosts")
+                else:
+                    fail(f"{js_file}: URLs only to allowed hosts", str(stray[:3]))
+            except Exception as e:
+                fail(f"{js_file} readable", str(e))
+
+        # 11c. Only license.js performs network calls outside the HEAD link check.
+        try:
+            if "credentials: 'omit'" in zf.read("license.js").decode():
+                ok("license.js: licence requests omit cookies")
+            else:
+                fail("license.js: licence requests omit cookies")
+        except Exception as e:
+            fail("license.js readable", str(e))
+
         # 12. No inline event handlers in HTML that bypass CSP.
-        for html_file in ["popup.html", "report.html", "permission.html"]:
+        for html_file in ["popup.html", "report.html", "permission.html", "license.html"]:
             try:
                 src = zf.read(html_file).decode()
                 inline = re.findall(r'\bon\w+\s*=\s*["\']', src, re.I)
@@ -243,7 +294,14 @@ def main():
     parser = argparse.ArgumentParser(description="StoreLift release packager")
     parser.add_argument("--test", action="store_true", help="Run packaging regression tests after building")
     parser.add_argument("--verify", metavar="ZIP", help="Verify an existing ZIP without rebuilding")
+    parser.add_argument("--release", action="store_true", help="Refuse to build until paid-licence settings are filled in")
     args = parser.parse_args()
+
+    if args.release:
+        issues = license_config_issues()
+        if issues:
+            print("ERROR: license-config.js is not ready for a paid release: " + "; ".join(issues), file=sys.stderr)
+            sys.exit(1)
 
     if args.verify:
         ok = verify(Path(args.verify))

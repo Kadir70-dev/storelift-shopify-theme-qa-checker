@@ -85,7 +85,21 @@ async function start() {
     if (old) activeSession = { id, hostname: old.hostname, updatedAt: old.auditedAt, pages: [old], checklist: {}, legacy: true };
   } else activeSession = records.find(s => s.id === id) || (!id && records.length === 1 ? records[0] : null);
   if (!activeSession) { document.querySelector('.report').textContent = 'Local report not found. Reopen the StoreLift extension and run an audit.'; return; }
+  // Agency report, PDF and CSV are Pro; an old single snapshot stays viewable on Free.
+  const License = globalThis.StoreLiftLicense;
+  const pro = License.isPro(await License.load(License.browserDeps()), Date.now());
+  if (!pro && !activeSession.legacy) { showUpgrade(); return; }
+  if (!pro) document.querySelector('.top .controls').classList.add('hidden');
   render();
+}
+function showUpgrade() {
+  const box = document.querySelector('.report'); box.replaceChildren();
+  box.append(el('p', 'STORELIFT PRO', 'eyebrow'), el('h1', 'Agency report is a Pro feature'),
+    el('p', 'Upgrade to StoreLift Pro to open the client handover report, save it as PDF and export issues as CSV. Your audit is saved and will be here after you upgrade.', 'subtitle'));
+  const wrap = el('div', undefined, 'controls upgrade'); const button = el('button', 'See StoreLift Pro');
+  button.type = 'button'; button.addEventListener('click', () => chrome.runtime.openOptionsPage());
+  wrap.append(button); box.append(wrap);
+  document.querySelector('.top .controls').classList.add('hidden');
 }
 $('print').addEventListener('click', () => window.print());
 $('export-csv').addEventListener('click', exportCsv);

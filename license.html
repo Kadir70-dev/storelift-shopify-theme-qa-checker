@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>StoreLift Pro</title><link rel="stylesheet" href="report.css"></head>
+<body><main class="report permission-page licence-page">
+<span class="eyebrow">STORELIFT · PLAN &amp; LICENCE</span>
+<h1>StoreLift Pro</h1>
+<p class="subtitle" id="plan-line">Checking your plan…</p>
+
+<section><h2>What you get</h2>
+<table class="plan-table"><thead><tr><th>Feature</th><th>Free</th><th>Pro</th></tr></thead><tbody>
+<tr><td>Scan current page: every check, findings and evidence</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>Manual handover checklist</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>Older snapshots and score comparison</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>Pages per handover session</td><td id="free-pages">3</td><td id="pro-pages">20</td></tr>
+<tr><td>Audit open store tabs (up to 12 at once)</td><td>—</td><td>Yes</td></tr>
+<tr><td>Verify internal links (HEAD)</td><td>—</td><td>Yes</td></tr>
+<tr><td>Agency report / Save as PDF, client name and notes</td><td>—</td><td>Yes</td></tr>
+<tr><td>Export JSON and issues CSV</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+<div class="controls"><button type="button" id="buy">Buy StoreLift Pro</button></div>
+<p class="section-hint" id="price"></p>
+<p class="section-hint">Checkout and payment are handled by Lemon Squeezy, our merchant of record. StoreLift never sees your card details. Your licence key arrives by email after purchase.</p>
+</section>
+
+<section id="activate-box"><h2>Activate a licence</h2>
+<label class="field">Licence key <input type="text" id="key" autocomplete="off" spellcheck="false" maxlength="64" placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"></label>
+<div class="controls"><button type="button" id="activate">Activate</button></div>
+</section>
+
+<section id="active-box" class="hidden"><h2>This browser</h2>
+<div class="info"><div><span>Status</span><strong id="lic-status">—</strong></div><div><span>Licence</span><strong id="lic-key">—</strong></div><div><span>Last checked</span><strong id="lic-checked">—</strong></div></div>
+<div class="controls"><button type="button" id="recheck">Check again</button> <button type="button" id="deactivate" class="secondary">Deactivate on this browser</button> <a id="manage" href="#" target="_blank" rel="noopener">Manage order / invoices</a></div>
+</section>
+
+<p id="result" class="section-hint" role="status" aria-live="polite"></p>
+
+<section><h2>What is sent, and when</h2>
+<p class="section-hint">Only when you press Activate, Check again or Deactivate, and about once a week while Pro is active, StoreLift sends your licence key and a random browser label to <strong>api.lemonsqueezy.com</strong> to confirm the licence. Nothing about the stores you audit is ever sent. If the check cannot connect, Pro keeps working for up to 30 days.</p>
+<p class="section-hint"><a id="terms" href="#" target="_blank" rel="noopener">Terms</a> · <a id="refund" href="#" target="_blank" rel="noopener">Refund policy</a> · <a id="privacy" href="#" target="_blank" rel="noopener">Privacy policy</a></p>
+</section>
+</main><script src="license-config.js"></script><script src="license.js"></script><script src="license-page.js"></script></body></html>

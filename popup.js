@@ -1,7 +1,8 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const Logic = globalThis.StoreLiftLogic;
-const state = { current: null, session: null, sessions: [], history: [], activeTab: null };
+const License = globalThis.StoreLiftLicense;
+const state = { current: null, session: null, sessions: [], history: [], activeTab: null, plan: License.PLANS.free };
 const LIMIT_PAGES = 20, LIMIT_SESSIONS = 24, MAX_TABS = 12;
 const makeId = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 const status = message => { $('status').textContent = message; };
@@ -26,15 +27,36 @@ async function saveSession() {
   state.sessions = [...state.sessions.filter(s => s.id !== state.session.id), state.session].slice(-LIMIT_SESSIONS);
   await chrome.storage.local.set({ storeliftSessions: state.sessions });
 }
+// Returns false when the plan's page limit keeps a new page out of the session.
+// Existing pages are never dropped to fit a smaller limit.
 async function addPage(page) {
   if (!state.session || state.session.hostname !== page.hostname) {
     state.session = [...state.sessions].reverse().find(s => s.hostname === page.hostname) || createSession(page.hostname);
   }
-  state.session.pages = Logic.upsertPage(state.session.pages, page, LIMIT_PAGES);
   state.current = page;
-  await saveSession();
   render(page);
+  const known = state.session.pages.some(p => Logic.normalizePageUrl(p.url) === Logic.normalizePageUrl(page.url));
+  if (!known && state.session.pages.length >= state.plan.pagesPerSession) { renderSession(); return false; }
+  state.session.pages = Logic.upsertPage(state.session.pages, page, LIMIT_PAGES);
+  await saveSession();
   renderSession();
+  return true;
+}
+const sessionFullNote = () => `This session already has ${state.plan.pagesPerSession} pages, the Free limit. Results are shown but not added. Upgrade to Pro for ${License.PLANS.pro.pagesPerSession} pages per session, or start a new session.`;
+function requirePro(feature, label) {
+  if (state.plan[feature]) return true;
+  status(`${label} is a StoreLift Pro feature. Opening plan details…`);
+  chrome.runtime.openOptionsPage();
+  return false;
+}
+function renderPlan() {
+  const pro = state.plan === License.PLANS.pro;
+  $('plan').textContent = pro ? 'PRO' : 'FREE · UPGRADE';
+  $('plan').classList.toggle('pro', pro);
+  for (const [id, feature] of [['scan-tabs', 'openTabAudit'], ['verify-links', 'linkCheck'], ['full-report', 'agencyReport'], ['export', 'export']]) {
+    $(id).classList.toggle('locked', !state.plan[feature]);
+    $(id).title = state.plan[feature] ? '' : 'StoreLift Pro feature';
+  }
 }
 async function scanOne() {
   $('scan').disabled = true;
@@ -42,7 +64,7 @@ async function scanOne() {
   try {
     const tab = await activeTab();
     const page = await collectTab(tab.id);
-    await addPage(page);
+    if (!await addPage(page)) return status(sessionFullNote());
     status((page.shopifyHints ? 'Shopify signals detected. ' : 'Shopify platform not confirmed. ') + 'One page added to this local handover session.');
   } catch (e) { status('Could not audit: ' + (e.message || e)); }
   finally { $('scan').disabled = false; }
@@ -58,6 +80,7 @@ async function openAccessPage(url, purpose) {
   await chrome.tabs.create({ url: page });
 }
 async function scanOpenTabs() {
+  if (!requirePro('openTabAudit', 'Audit open store tabs')) return;
   $('scan-tabs').disabled = true;
   try {
     const active = await activeTab();
@@ -76,7 +99,7 @@ async function scanOpenTabs() {
       try {
         const page = await collectTab(tab.id);
         if (page.origin !== origin) throw Error('Tab navigated to another origin.');
-        await addPage(page);
+        if (!await addPage(page)) throw Error('Session full.');
         ok++;
       } catch { failed++; }
     }
@@ -138,6 +161,7 @@ function renderSession() {
 }
 async function verifyLinks() {
   if (!state.current) return status('Scan a page first.');
+  if (!requirePro('linkCheck', 'Verify internal links')) return;
   const button = $('verify-links'); button.disabled = true;
   try {
     const active = await activeTab();
@@ -194,6 +218,7 @@ function renderHistory() {
 }
 async function openReport(id, single = false) {
   if (!id) return status('Scan a page first.');
+  if (!single && !requirePro('agencyReport', 'The agency report')) return;
   await chrome.tabs.create({ url: chrome.runtime.getURL('report.html') + '?mode=' + (single ? 'single' : 'session') + '&id=' + encodeURIComponent(id) });
 }
 function download(name, content, mime) {
@@ -215,13 +240,20 @@ async function init() {
   state.history = Array.isArray(stored.storeliftReports) ? stored.storeliftReports : [];
   state.sessions = Array.isArray(stored.storeliftSessions) ? stored.storeliftSessions : [];
   state.session = state.sessions.at(-1) || null;
-  renderSession(); renderHistory();
+  renderSession(); renderHistory(); renderPlan();
+  $('plan').addEventListener('click', () => chrome.runtime.openOptionsPage());
+  // Stored plan first (instant), then the weekly re-check; offline keeps the grace period.
+  const deps = License.browserDeps();
+  License.load(deps).then(lic => { state.plan = License.planFor(lic, Date.now()); renderPlan(); }).catch(() => {});
+  License.current(deps)
+    .then(lic => { state.plan = License.planFor(lic, Date.now()); renderPlan(); })
+    .catch(() => {});
   $('scan').addEventListener('click', scanOne);
   $('scan-tabs').addEventListener('click', scanOpenTabs);
   $('verify-links').addEventListener('click', verifyLinks);
   $('save').addEventListener('click', () => saveSnapshot().catch(e => status(e.message)));
   $('full-report').addEventListener('click', () => openReport(state.session?.id));
-  $('export').addEventListener('click', () => state.session && download('storelift-handover-' + Logic.safeFilename(state.session.hostname) + '.json', JSON.stringify(state.session, null, 2), 'application/json'));
+  $('export').addEventListener('click', () => state.session && requirePro('export', 'Export JSON') && download('storelift-handover-' + Logic.safeFilename(state.session.hostname) + '.json', JSON.stringify(state.session, null, 2), 'application/json'));
   $('new-session').addEventListener('click', () => startNewSession().catch(e => status(e.message)));
   $('clear').addEventListener('click', () => clearEverything().catch(e => status(e.message)));
 }

@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>StoreLift Theme QA</title><link rel="stylesheet" href="style.css"></head>
 <body><main class="app">
-<header class="top"><span class="logo" aria-hidden="true">▥</span><div><strong>storelift<span class="blue">.</span></strong><small>Shopify Theme QA Checker</small></div><span class="local">BROWSER ONLY</span></header>
+<header class="top"><span class="logo" aria-hidden="true">▥</span><div><strong>storelift<span class="blue">.</span></strong><small>Shopify Theme QA Checker</small></div><button type="button" class="plan" id="plan" title="Plan and licence">FREE</button></header>
 <section class="hero"><span class="eyebrow">PRE-LAUNCH QUALITY CONTROL</span><h1>Ship a better<br><em>storefront.</em></h1><p>Inspect real storefront pages and build a professional client handover report.</p>
 <div class="hero-buttons"><button type="button" class="btn primary" id="scan">Scan current page</button><button type="button" class="btn secondary" id="scan-tabs">Audit open store tabs</button></div>
-<p class="fine">Read-only • No server • Open tabs only • Never checks out</p></section>
+<p class="fine">Read-only • Audits stay on this browser • Never checks out</p></section>
 <div id="status" class="status" role="status" aria-live="polite">Open a Shopify storefront and run a user-initiated audit.</div>
 <section id="results" class="hidden">
 <div class="summary"><div class="score"><span>QA heuristic</span><strong id="score">—</strong><small>/ 100</small></div><div class="stats"><span id="site" class="domain">—</span><p><b id="issue-count">—</b> findings on current page</p><p class="muted" id="scanned-at"></p></div></div>
@@ -21,4 +21,4 @@
 <div class="actions compact"><button type="button" class="btn text" id="new-session">New handover session</button><button type="button" class="btn text danger" id="clear">Delete local audits</button></div></section>
 <section class="history"><div class="section-head"><h2>Older saved snapshots</h2><span>On this browser</span></div><div id="history-list" class="history-list"></div><div id="compare" class="compare hidden"></div></section>
 <footer>INDEPENDENT TOOL · NOT AFFILIATED WITH SHOPIFY · NO BACKGROUND CRAWLING</footer>
-</main><script src="logic.js"></script><script src="popup.js"></script></body></html>
+</main><script src="logic.js"></script><script src="license-config.js"></script><script src="license.js"></script><script src="popup.js"></script></body></html>

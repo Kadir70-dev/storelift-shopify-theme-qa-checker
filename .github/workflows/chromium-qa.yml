@@ -9,7 +9,7 @@ permissions:
 jobs:
   chromium-qa:
     name: Unit, packaging, and real Chromium fixture QA
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout source
@@ -26,6 +26,8 @@ jobs:
           python-version: '3.12'
       - name: Node logic unit tests (77 assertions expected)
         run: node tests/logic.test.cjs
+      - name: Licence logic unit tests (mocked API, no network)
+        run: node tests/license.test.cjs
       - name: ZIP packaging + regression checks
         run: python3 build_release.py --test
       - name: Install desktop Chromium for Playwright
@@ -40,12 +42,12 @@ jobs:
           python3 tests/browser_qa.py
       - name: Inspect distributable ZIP
         run: |
-          python3 build_release.py --verify dist/storelift-theme-qa-checker-v0.2.0.zip
-          unzip -l dist/storelift-theme-qa-checker-v0.2.0.zip
+          python3 build_release.py --verify dist/storelift-theme-qa-checker-v*.zip
+          unzip -l dist/storelift-theme-qa-checker-v*.zip
       - name: Save tested ZIP
         uses: actions/upload-artifact@v4
         with:
           name: storelift-qa-verified-extension-zip
-          path: dist/storelift-theme-qa-checker-v0.2.0.zip
+          path: dist/storelift-theme-qa-checker-v*.zip
           if-no-files-found: error
           retention-days: 14
