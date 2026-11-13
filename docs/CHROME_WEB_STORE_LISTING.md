@@ -24,7 +24,7 @@ StoreLift — Shopify Theme QA Checker is a standalone browser-only quality-cont
 FREE AND PRO
 StoreLift is free to install and use. The free plan includes every page check, findings with evidence, the manual handover checklist and up to 3 pages per handover session.
 
-StoreLift Pro is an optional paid licence, bought outside the Chrome Web Store on a Lemon Squeezy checkout ([OWNER: price and plan, e.g. "one-time payment of $X"]). Pro unlocks: Audit open store tabs, Verify internal links, the agency handover report with Save as PDF, JSON/CSV export and 20 pages per session. These features are marked "PRO" in the extension and open the plan page instead of running on the free plan.
+StoreLift Pro is an optional paid licence, bought outside the Chrome Web Store on a Lemon Squeezy checkout (one-time payment of US$29, lifetime licence, up to 3 browsers). Pro unlocks: Audit open store tabs, Verify internal links, the agency handover report with Save as PDF, JSON/CSV export and 20 pages per session. These features are marked "PRO" in the extension and open the plan page instead of running on the free plan.
 
 HOW IT WORKS
 Open a public Shopify storefront in Chrome, then click the extension. Everything runs locally in your browser.

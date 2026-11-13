@@ -6,11 +6,11 @@
 globalThis.StoreLiftLicenseConfig = Object.freeze({
   provider: 'lemonsqueezy',
   apiBase: 'https://api.lemonsqueezy.com/v1/licenses',
-  storeId: null,          // number, Lemon Squeezy store ID
-  productIds: [],         // numbers, product(s) whose keys unlock Pro
-  checkoutUrl: '',        // https://<store>.lemonsqueezy.com/buy/<variant-uuid>
+  storeId: 522451,        // number, Lemon Squeezy store ID
+  productIds: [1522663],  // numbers, product(s) whose keys unlock Pro
+  checkoutUrl: 'https://storelift.lemonsqueezy.com/checkout/buy/3a6cc901-7bee-4587-b9fc-05c2ffb4b9cb',
   manageUrl: 'https://app.lemonsqueezy.com/my-orders',
-  priceLabel: '',         // shown on the upgrade card, e.g. owner-approved price text
+  priceLabel: 'US$29 one-time · lifetime licence · up to 3 browsers',
   termsUrl: 'https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/terms.html',
   refundUrl: 'https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/refund.html',
   privacyUrl: 'https://kadir70-dev.github.io/storelift-shopify-theme-qa-checker/privacy.html'
